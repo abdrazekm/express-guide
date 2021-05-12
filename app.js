@@ -1,20 +1,18 @@
 const express = require('express');
 
+const bodyParser = require('body-parser');
+
 const app = express();
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
 
-app.use(',', (req,res,next) => {
-    console.log('In first mw');
-    next();
-});
+app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/add-product', (req, res,next) => {
-    console.log('in second mw');
-    res.send('add product route');
-});
+app.use(adminRoutes);
+app.use(shopRoutes);
 
-app.use('/', (req,res, next) => {
-    console.log('In third mw');
-    res.send('default route');
-});
+app.use((req,res,next) => {
+    res.status(404).send('<h1>Request Not Found</h1>')
+})
 
 app.listen(3000);
